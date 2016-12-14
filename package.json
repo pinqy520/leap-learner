@@ -1,0 +1,33 @@
+{
+  "name": "simple-coffee-starter",
+  "version": "1.0.0",
+  "description": "minimal coffeescript boilerplate",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --inline --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinqy520/simple-coffee-starter.git"
+  },
+  "keywords": [],
+  "author": "Huang Qi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pinqy520/simple-coffee-starter/issues"
+  },
+  "homepage": "https://github.com/pinqy520/simple-coffee-starter#readme",
+  "devDependencies": {
+    "browser-sync": "latest",
+    "browser-sync-webpack-plugin": "latest",
+    "coffee-loader": "latest",
+    "coffee-script": "latest",
+    "extract-text-webpack-plugin": "latest",
+    "html-webpack-plugin": "latest",
+    "progress-bar-webpack-plugin": "latest",
+    "webpack": "latest",
+    "webpack-dev-server": "latest"
+  },
+  "dependencies": {}
+}
