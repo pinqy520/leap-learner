@@ -8,14 +8,29 @@ createRxLoopFromLeap = (fn) ->
 createRxFrameFromLoop = (stream) ->
     stream.map parseFrameToRecordableRaw
 
-createRxFrameFromFile = (path) ->
-    path
+createRxFrameFromJson = (data) ->
+    Rx.Observable.from data
 
-createRxGestureFromFrames = (stream) ->
-    stream.subscribe (frame) ->
-        if frame.hands.length > 0
-            console.log frame
+createRxActiveFramesFromFrames = (stream) ->
+    buffer = []
+    Rx.Observable.create (observer) ->
+        stream.subscribe (frame) ->
+            if frame.hands.length > 0
+                buffer.push frame
+            else 
+                observer.next(buffer) if buffer.length > 0
+                buffer = []
+                
+createRxHandsFromActiveFrames = (stream) ->
+    stream
 
-createRxStreams = (fn) -> createRxGestureFromFrames createRxFrameFromLoop createRxLoopFromLeap fn
+createRxGestureFromHands = (stream) ->
+    stream
 
-module.exports = { createRxLoopFromLeap, createRxFrameFromLoop, createRxFrameFromFile, createRxGestureFromFrames, createRxStreams }
+createRxRecognitionFromGesture = (stream) ->
+    stream
+
+createRxResultFromFrames = (stream) -> createRxRecognitionFromGesture createRxGestureFromHands createRxHandsFromActiveFrames createRxActiveFramesFromFrames stream
+
+
+module.exports = { createRxLoopFromLeap, createRxFrameFromLoop, createRxFrameFromJson, createRxResultFromFrames }
