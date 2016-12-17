@@ -40,6 +40,10 @@
 
 Leap = require 'leapjs'
 
-{ createRxStreams } = require './streams'
+{ createRxFrameFromLeap, createRxResultFromFrames } = require './streams'
 
-createRxStreams (fn) -> Leap.loop(fn)
+frames = createRxFrameFromLeap (fn) -> Leap.loop(fn)
+stream = createRxResultFromFrames frames
+
+stream.subscribe (item) ->
+    console.log item

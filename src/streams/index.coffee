@@ -1,5 +1,5 @@
 Rx = require 'rxjs/Rx'
-{ parseFrameToRecordableRaw } = require '../parsers'
+{ parseFrameToRecordableRaw, sameHands, isAct } = require '../parsers'
 
 createRxLoopFromLeap = (fn) ->
     Rx.Observable.create (observer) -> 
@@ -8,29 +8,26 @@ createRxLoopFromLeap = (fn) ->
 createRxFrameFromLoop = (stream) ->
     stream.map parseFrameToRecordableRaw
 
+createRxFrameFromLeap = (fn) -> createRxFrameFromLoop createRxLoopFromLeap fn
+
 createRxFrameFromJson = (data) ->
     Rx.Observable.from data
 
-createRxActiveFramesFromFrames = (stream) ->
+createRxGestureFrameFromFrames = (stream) ->
     buffer = []
     Rx.Observable.create (observer) ->
         stream.subscribe (frame) ->
-            if frame.hands.length > 0
-                buffer.push frame
-            else 
-                observer.next(buffer) if buffer.length > 0
+            act = isAct frame.hands
+            if buffer.length > 0 and ((not sameHands buffer[0], frame.hands) or not act)
+                observer.next buffer
                 buffer = []
-                
-createRxHandsFromActiveFrames = (stream) ->
-    stream
-
-createRxGestureFromHands = (stream) ->
-    stream
+            else if frame.hands.length > 0 and act
+                buffer.push frame.hands
 
 createRxRecognitionFromGesture = (stream) ->
     stream
 
-createRxResultFromFrames = (stream) -> createRxRecognitionFromGesture createRxGestureFromHands createRxHandsFromActiveFrames createRxActiveFramesFromFrames stream
+createRxResultFromFrames = (stream) -> createRxRecognitionFromGesture createRxGestureFrameFromFrames stream
 
 
-module.exports = { createRxLoopFromLeap, createRxFrameFromLoop, createRxFrameFromJson, createRxResultFromFrames }
+module.exports = { createRxFrameFromLeap, createRxFrameFromJson, createRxResultFromFrames }
