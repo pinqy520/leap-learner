@@ -6,16 +6,6 @@ const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
     inject: 'body'
 })
 
-/* Configure BrowserSync */
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
-const BrowserSyncPluginConfig = new BrowserSyncPlugin({
-    host: 'localhost',
-    port: 3000,
-    proxy: 'http://localhost:8080/'
-}, config = {
-    reload: false
-})
-
 /* Configure ProgressBar */
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const ProgressBarPluginConfig = new ProgressBarPlugin()
@@ -37,5 +27,5 @@ module.exports = {
         ]
     },
     resolve: { extensions: ["", ".web.coffee", ".web.js", ".coffee", ".js"] },
-    plugins: [HTMLWebpackPluginConfig, BrowserSyncPluginConfig, ProgressBarPluginConfig]
+    plugins: [HTMLWebpackPluginConfig, ProgressBarPluginConfig]
 }

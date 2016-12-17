@@ -1,11 +1,14 @@
 {
-  "name": "simple-coffee-starter",
-  "version": "1.0.0",
-  "description": "minimal coffeescript boilerplate",
+  "name": "leap-learner",
+  "version": "0.0.1",
+  "description": "(WIP) gesture recognition learning for leap motion",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --inline --open"
+    "start": "webpack-dev-server --inline --open",
+    "compile": "coffee --watch --compile --output lib src",
+    "dev": "nodemon ./lib/prepare.js",
+    "record": "node ./lib/prepare.js"
   },
   "repository": {
     "type": "git",
@@ -19,15 +22,18 @@
   },
   "homepage": "https://github.com/pinqy520/simple-coffee-starter#readme",
   "devDependencies": {
-    "browser-sync": "latest",
-    "browser-sync-webpack-plugin": "latest",
     "coffee-loader": "latest",
     "coffee-script": "latest",
     "extract-text-webpack-plugin": "latest",
     "html-webpack-plugin": "latest",
+    "nodemon": "^1.11.0",
     "progress-bar-webpack-plugin": "latest",
     "webpack": "latest",
     "webpack-dev-server": "latest"
   },
-  "dependencies": {}
+  "dependencies": {
+    "brain.js": "^0.7.0",
+    "leapjs": "^0.6.4",
+    "rxjs": "^5.0.1"
+  }
 }

@@ -1,0 +1,2 @@
+parseRawToMatrix = (raw) ->
+    raw
