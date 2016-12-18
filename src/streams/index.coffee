@@ -1,6 +1,6 @@
 Rx = require 'rxjs/Rx'
 { parseFrameToRecordableRaw, ANN } = require '../parsers'
-{ isGroup, isGesture, parseGestureToMatrix, preProcessGesture } = ANN()
+{ isGroup, isGesture, parseGestureToMatrix, preProcessGesture, Net } = ANN()
 
 createRxLoopFromLeap = (fn) ->
     Rx.Observable.create (observer) -> 
@@ -17,17 +17,52 @@ createRxFrameFromJson = (data) ->
 createRxGestureFrameFromFrames = (stream) ->
     buffer = []
     Rx.Observable.create (observer) ->
-        stream.subscribe (frame) ->
+        next = (frame) ->
             if isGroup buffer, frame.hands
+                # console.log frame.hands
                 buffer.push frame.hands
             else if isGesture buffer
                 observer.next preProcessGesture buffer
                 buffer = []
+        complete = -> observer.complete()
+        error = (err) -> observer.error(err)
+        stream.subscribe next, error, complete
 
-createRxRecognitionFromGesture = (stream) ->
+createRxTransformFromGesture = (stream) ->
     stream.map parseGestureToMatrix
 
-createRxResultFromFrames = (stream) -> createRxRecognitionFromGesture createRxGestureFrameFromFrames stream
+createRxRecognitionFromTransform = (stream) ->
+    # stream
+    stream.subscribe (matrix) ->
+        console.log recognize matrix
+
+createRxResultFromFrames = (stream) -> createRxRecognitionFromTransform createRxTransformFromGesture createRxGestureFrameFromFrames stream
 
 
-module.exports = { createRxFrameFromLeap, createRxFrameFromJson, createRxResultFromFrames }
+createRxLearnSourceFromFrames = (stream, name) -> 
+    source = createRxTransformFromGesture createRxGestureFrameFromFrames stream
+    source.map (matrix) -> createLearnParams matrix, name
+
+createRxLearnFromSources = (streams) ->
+    source = Rx.Observable.merge streams...
+    source.toArray().map (data) -> learn data
+
+createLearnParams = (input, name) ->
+    console.log name
+    param = 
+        input: input
+        output: {}
+    param.output[name] = 1.0 if name
+    return param
+
+net = new Net
+
+learn = (data) -> 
+    net = new Net
+    net.train data
+    return net
+
+recognize = (data) ->
+    net.run data
+
+module.exports = { createRxFrameFromLeap, createRxFrameFromJson, createRxResultFromFrames, createRxLearnSourceFromFrames, createRxLearnFromSources }

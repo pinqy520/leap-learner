@@ -39,12 +39,26 @@
 
 
 Leap = require 'leapjs'
-data = require '../data/1481962207445.json'
+data_1 = require '../data/nosense-1.json'
+data_2 = require '../data/nosense-2.json'
+data_right = require '../data/right.json'
 
-{ createRxFrameFromLeap, createRxFrameFromJson, createRxResultFromFrames } = require './streams'
+{ createRxFrameFromLeap, createRxFrameFromJson, createRxResultFromFrames, createRxLearnSourceFromFrames, createRxLearnFromSources } = require './streams'
 
-frames = createRxFrameFromJson data # (fn) -> Leap.loop(fn)
-stream = createRxResultFromFrames frames
+leapIn = createRxFrameFromLeap (fn) -> Leap.loop fn
 
-stream.subscribe (item) ->
-    console.log item
+
+inputsNoSense1 = createRxFrameFromJson data_1
+inputsNoSense2 = createRxFrameFromJson data_2
+inputsRight = createRxFrameFromJson data_right
+
+sourceNoSense1 = createRxLearnSourceFromFrames inputsNoSense1
+sourceNoSense2 = createRxLearnSourceFromFrames inputsNoSense2
+sourceRight = createRxLearnSourceFromFrames inputsRight, 'right'
+
+netStream = createRxLearnFromSources [sourceNoSense1, sourceNoSense2, sourceRight]
+
+netStream.subscribe (net) ->
+    console.log net
+
+createRxResultFromFrames leapIn

@@ -3,14 +3,14 @@ fs = require 'fs'
 
 { parseFrameToRecordableRaw } = require './parsers'
 
-interval = 10000
+interval = 5000
 
 recording = false
 
 frames = []
 
 onFrame = (frame) ->
-    frames.push parseFrameToRaw frame if recording
+    frames.push parseFrameToRecordableRaw frame if recording
 
 start = ->
     console.log 'start'

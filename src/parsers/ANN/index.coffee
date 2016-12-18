@@ -1,3 +1,5 @@
+brain = require 'brain.js'
+
 ANN = ->
     isSameHands = (h1, h2) ->
         # console.log h1, h2
@@ -38,7 +40,7 @@ ANN = ->
     preProcessGesture = (frames) -> 
         count = 0
         inc = frames.length / frameIntervalCount
-        limit = frames.length - inc
+        limit = frames.length - inc - 1
         while count < limit
             count += inc
             frames[Math.floor count]
@@ -47,6 +49,7 @@ ANN = ->
 
     parseGestureToMatrix = (frames) ->
         matrix = []
+        console.log frames
         for hands in frames
             for hand in hands
                 matrix.push hand.palmPosition...
@@ -56,7 +59,8 @@ ANN = ->
                     matrix.push finger.tipVelocity...
         matrix
 
+    Net = brain.NeuralNetwork
 
-    { isGroup, isGesture, parseGestureToMatrix, preProcessGesture }
+    { isGroup, isGesture, parseGestureToMatrix, preProcessGesture, Net }
 
 module.exports = { ANN }
