@@ -1,5 +1,5 @@
 Rx = require 'rxjs/Rx'
-{ parseFrameToRecordableRaw, sameHands, isAct } = require '../parsers'
+{ parseFrameToRecordableRaw, isGroup, isGesture } = require '../parsers'
 
 createRxLoopFromLeap = (fn) ->
     Rx.Observable.create (observer) -> 
@@ -17,12 +17,11 @@ createRxGestureFrameFromFrames = (stream) ->
     buffer = []
     Rx.Observable.create (observer) ->
         stream.subscribe (frame) ->
-            act = isAct frame.hands
-            if buffer.length > 0 and ((not sameHands buffer[0], frame.hands) or not act)
+            if isGroup buffer, frame.hands
+                buffer.push frame.hands
+            else if isGesture buffer
                 observer.next buffer
                 buffer = []
-            else if frame.hands.length > 0 and act
-                buffer.push frame.hands
 
 createRxRecognitionFromGesture = (stream) ->
     stream

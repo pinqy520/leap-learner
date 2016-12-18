@@ -39,10 +39,11 @@
 
 
 Leap = require 'leapjs'
+data = require '../data/1481962207445.json'
 
-{ createRxFrameFromLeap, createRxResultFromFrames } = require './streams'
+{ createRxFrameFromLeap, createRxFrameFromJson, createRxResultFromFrames } = require './streams'
 
-frames = createRxFrameFromLeap (fn) -> Leap.loop(fn)
+frames = createRxFrameFromJson data # (fn) -> Leap.loop(fn)
 stream = createRxResultFromFrames frames
 
 stream.subscribe (item) ->

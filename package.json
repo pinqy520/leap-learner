@@ -29,6 +29,7 @@
     "nodemon": "^1.11.0",
     "progress-bar-webpack-plugin": "latest",
     "webpack": "latest",
+    "json-loader": "^0.5.4",
     "webpack-dev-server": "latest"
   },
   "dependencies": {

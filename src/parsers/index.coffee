@@ -1,7 +1,8 @@
 { parseFrameToRecordableRaw } = require './parseFrameToRecordableRaw'
 
-sameHands = (h1, h2) ->
-    if h1 and h2
+isSameHands = (h1, h2) ->
+    # console.log h1, h2
+    if h1 and h2 and h1.length > 0
         if h1.length is h2.length
             count = h1.length - 1
             for i in [0..count]
@@ -24,6 +25,9 @@ isAct = (hands) ->
                     return true
     # console.log false
     return false
-    
 
-module.exports = { parseFrameToRecordableRaw, sameHands, isAct }
+isGroup = (group, hands) -> hands.length > 0 and ((group.length is 0) or (((isAct group[0]) or (isAct hands)) and (isSameHands group[0], hands)))
+
+isGesture = (buffer) -> buffer.length > 10
+
+module.exports = { parseFrameToRecordableRaw, isGroup, isGesture  }
