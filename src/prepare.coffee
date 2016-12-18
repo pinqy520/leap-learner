@@ -3,7 +3,7 @@ fs = require 'fs'
 
 { parseFrameToRecordableRaw } = require './parsers'
 
-interval = 5000
+interval = 10000
 
 recording = false
 
@@ -21,7 +21,7 @@ start = ->
 stop = ->
     console.log 'stop'
     recording = false
-    write JSON.stringify frames, null, 2
+    write JSON.stringify frames
     console.log 'done'
 
 write = (str) ->

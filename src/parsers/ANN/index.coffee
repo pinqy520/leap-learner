@@ -49,7 +49,7 @@ ANN = ->
 
     parseGestureToMatrix = (frames) ->
         matrix = []
-        console.log frames
+        # console.log frames
         for hands in frames
             for hand in hands
                 matrix.push hand.palmPosition...

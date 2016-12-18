@@ -22,9 +22,12 @@ createRxGestureFrameFromFrames = (stream) ->
                 # console.log frame.hands
                 buffer.push frame.hands
             else if isGesture buffer
+                # console.log buffer
                 observer.next preProcessGesture buffer
                 buffer = []
-        complete = -> observer.complete()
+        complete = ->
+            observer.next preProcessGesture buffer if isGesture buffer
+            observer.complete()
         error = (err) -> observer.error(err)
         stream.subscribe next, error, complete
 
