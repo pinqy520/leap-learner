@@ -46,6 +46,7 @@ data_two_1 = require '../data/two-1.json'
 data_two_2 = require '../data/two-2.json'
 data_two_3 = require '../data/two-3.json'
 data_tap = require '../data/tap.json'
+data_left = require '../data/left.json'
 
 { createRxFrameFromLeap, createRxFrameFromJson, createRxResultFromFrames, createRxLearnSourceFromFrames, createRxLearnFromSources } = require './streams'
 
@@ -59,6 +60,7 @@ inputsTwo1 = createRxFrameFromJson data_two_1
 inputsTwo2 = createRxFrameFromJson data_two_2
 inputsTwo3 = createRxFrameFromJson data_two_3
 inputsTap = createRxFrameFromJson data_tap
+inputsLeft = createRxFrameFromJson data_left
 
 # sourceNoSense1 = createRxLearnSourceFromFrames inputsNoSense1
 sourceNoSense2 = createRxLearnSourceFromFrames inputsNoSense2
@@ -67,8 +69,9 @@ sourceTwo1 = createRxLearnSourceFromFrames inputsTwo1, 'two'
 sourceTwo2 = createRxLearnSourceFromFrames inputsTwo2, 'two'
 sourceTwo3 = createRxLearnSourceFromFrames inputsTwo3, 'two'
 sourceTap = createRxLearnSourceFromFrames inputsTap, 'tap'
+sourceLeft = createRxLearnSourceFromFrames inputsLeft, 'left'
 
-netStream = createRxLearnFromSources [sourceNoSense2, sourceRight, sourceTwo1, sourceTwo2, sourceTwo3, sourceTap]
+netStream = createRxLearnFromSources [sourceNoSense2, sourceRight, sourceTwo3, sourceTap, sourceLeft]
 
 netStream.subscribe()
 

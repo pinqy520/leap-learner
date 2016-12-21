@@ -27,10 +27,10 @@
     "coffee-script": "latest",
     "extract-text-webpack-plugin": "latest",
     "html-webpack-plugin": "latest",
-    "nodemon": "^1.11.0",
+    "nodemon": "latest",
     "progress-bar-webpack-plugin": "latest",
     "webpack": "latest",
-    "json-loader": "^0.5.4",
+    "json-loader": "latest",
     "webpack-dev-server": "latest"
   },
   "dependencies": {
