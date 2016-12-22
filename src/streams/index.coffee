@@ -3,27 +3,30 @@ _ = require 'lodash'
 { parseFrameToRecordableRaw, ANN } = require '../parsers'
 { isGroup, isGesture, parseGestureToMatrix, preProcessGesture, Net } = ANN()
 
+# Listen from leapjs loop
 createRxLoopFromLeap = (fn) ->
-    Rx.Observable.create (observer) -> 
+    Rx.Observable.create (observer) ->
         fn (frame) -> observer.next frame
 
+# Extract Useful data from frame
 createRxFrameFromLoop = (stream) ->
     stream.map parseFrameToRecordableRaw
 
+# Get Frames from Leapjs
 createRxFrameFromLeap = (fn) -> createRxFrameFromLoop createRxLoopFromLeap fn
 
+# Get Frames from records
 createRxFrameFromJson = (data) ->
     Rx.Observable.from data
 
+# Extract some Gesture from frames
 createRxGestureFrameFromFrames = (stream) ->
     buffer = []
     Rx.Observable.create (observer) ->
         next = (frame) ->
             if isGroup buffer, frame.hands
-                # console.log frame.hands
                 buffer.push frame.hands
             else if isGesture buffer
-                # console.log buffer
                 observer.next preProcessGesture buffer
                 buffer = []
         complete = ->
@@ -32,11 +35,13 @@ createRxGestureFrameFromFrames = (stream) ->
         error = (err) -> observer.error(err)
         stream.subscribe next, error, complete
 
+# transform this Gesture to matrix for parsing
 createRxTransformFromGesture = (stream) ->
     stream.map parseGestureToMatrix
 
+# --------------------
+
 createRxRecognitionFromTransform = (stream) ->
-    # stream
     stream.subscribe (matrix) ->
         console.log recognize matrix
 
@@ -51,6 +56,8 @@ createRxLearnFromSources = (streams) ->
     source = Rx.Observable.merge streams...
     source.toArray().map (data) -> learn data
 
+# ---------------
+
 createLearnParams = (input, name) ->
     console.log name
     param = 
@@ -60,7 +67,7 @@ createLearnParams = (input, name) ->
     return param
 
 class LeapNet
-    net: new Net
+    _net: new Net
     _leapFormat: (data) =>
         input: @_leapFormatMatrix data.input
         output: data.output
@@ -73,10 +80,10 @@ class LeapNet
         @_leapMaxMatrix = _.unzipWith matrixes, _.rest _.max
         @_leapMinMatrix = _.unzipWith matrixes, _.rest _.min
         @_leapSubMatrix = _.zipWith @_leapMaxMatrix, @_leapMinMatrix, _.subtract
-        @net.train data.map @_leapFormat
+        @_net.train data.map @_leapFormat
 
     run: (data) ->
-        @net.run @_leapFormatMatrix data
+        @_net.run @_leapFormatMatrix data
 
 net = new LeapNet
 
