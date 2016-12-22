@@ -73,6 +73,6 @@ sourceLeft = createRxLearnSourceFromFrames inputsLeft, 'left'
 
 netStream = createRxLearnFromSources [sourceNoSense2, sourceRight, sourceTwo3, sourceTap, sourceLeft]
 
-netStream.subscribe()
+netStream.subscribe (net) -> net
 
 createRxResultFromFrames leapIn

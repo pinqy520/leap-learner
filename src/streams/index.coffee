@@ -1,4 +1,5 @@
 Rx = require 'rxjs/Rx'
+_ = require 'lodash'
 { parseFrameToRecordableRaw, ANN } = require '../parsers'
 { isGroup, isGesture, parseGestureToMatrix, preProcessGesture, Net } = ANN()
 
@@ -58,10 +59,29 @@ createLearnParams = (input, name) ->
     param.output[name] = 1.0 if name
     return param
 
-net = new Net
+class LeapNet
+    net: new Net
+    _leapFormat: (data) =>
+        input: @_leapFormatMatrix data.input
+        output: data.output
+    
+    _leapFormatMatrix: (matrix) ->
+        _.zipWith matrix, @_leapMinMatrix, @_leapSubMatrix, (v, min, sub) -> (v - min) / sub
+
+    train: (data) ->
+        matrixes = _.map data, 'input'
+        @_leapMaxMatrix = _.unzipWith matrixes, _.rest _.max
+        @_leapMinMatrix = _.unzipWith matrixes, _.rest _.min
+        @_leapSubMatrix = _.zipWith @_leapMaxMatrix, @_leapMinMatrix, _.subtract
+        @net.train data.map @_leapFormat
+
+    run: (data) ->
+        @net.run @_leapFormatMatrix data
+
+net = new LeapNet
 
 learn = (data) -> 
-    net = new Net
+    net = new LeapNet
     net.train data
     return net
 
