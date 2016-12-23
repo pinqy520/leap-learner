@@ -68,7 +68,7 @@ create = (opt) ->
     learn = (data) -> _train data
     recognize = (data) -> _run data
 
-    _isact = (hands) ->
+    _isAct = (hands) ->
         if hands.length > 0
             for hand in hands
                 if _opt.minVelocity < absVelocity hand.palmVelocity
@@ -78,8 +78,8 @@ create = (opt) ->
                         return true
         return false
 
-    _isgroup = (group, hands) -> hands.length > 0 and ((group.length is 0) or (((_isact group[0]) or (_isact hands)) and (same group[0], hands)))
-    _isgesture = (buffer) -> _gestureFrameCount < buffer.length
+    isGroup = (group, hands) -> hands.length > 0 and ((group.length is 0) or (((_isAct group[0]) or (_isAct hands)) and (same group[0], hands)))
+    isGesture = (buffer) -> _gestureFrameCount < buffer.length
     _formatGesture = (frames) -> 
         count = 0
         inc = frames.length / _frameIntervalCount
@@ -87,8 +87,9 @@ create = (opt) ->
         while count < limit
             count += inc
             frames[Math.floor count]
+    transform = (frames) -> parseGestureToMatrix _formatGesture frames
 
-    { learn, recognize }
+    { learn, recognize, isGroup, isGesture, transform, createLearnParams }
 
 
 

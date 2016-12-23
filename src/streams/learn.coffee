@@ -1,11 +1,12 @@
-createRxRecognitionFromTransform = (stream) ->
-    stream.subscribe (matrix) ->
-        console.log recognize matrix
 
-createRxLearnSourceFromFrames = (stream, name) -> 
-    source = createRxTransformFromGesture createRxGestureFrameFromFrames stream
-    source.map (matrix) -> createLearnParams matrix, name
+createLearnStream = (learner) ->
+    createRxRecognitionFromTransform = (stream) ->
+        stream.subscribe (matrix) ->
+            console.log learner.recognize matrix
 
-createRxLearnFromSources = (streams) ->
-    source = Rx.Observable.merge streams...
-    source.toArray().map (data) -> learn data
+    createRxLearnSourceFromFrames = (stream, name) -> 
+        stream.map (matrix) -> learner.createLearnParams matrix, name
+
+    createRxLearnFromSources = (streams) ->
+        source = Rx.Observable.merge streams...
+        source.toArray().map (data) -> learner.learn data
