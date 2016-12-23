@@ -1,3 +1,5 @@
+Rx = require 'rxjs/Rx'
+
 
 createDataStream = (learner) ->
     # Extract some Gesture from frames
@@ -19,3 +21,10 @@ createDataStream = (learner) ->
     # transform this Gesture to matrix for parsing
     createRxTransformFromGesture = (stream) ->
         stream.map learner.transform
+
+    createRxData = (stream) -> createRxTransformFromGesture createRxGestureFrameFromFrames stream
+
+    { createRxData }
+
+module.exports = createDataStream
+module.exports.default = createDataStream
