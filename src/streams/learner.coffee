@@ -1,7 +1,7 @@
 Rx = require 'rxjs/Rx'
 
 
-createLearnStream = (learner) ->
+create = (learner) ->
     createRxRecognitionFromTransform = (stream) ->
         stream.map (matrix) -> learner.recognize matrix
 
@@ -17,5 +17,5 @@ createLearnStream = (learner) ->
 
     { createRxRecognition, createRxLearn }
 
-module.exports = createLearnStream
-module.exports.default = createLearnStream
+module.exports = create
+module.exports.default = create
