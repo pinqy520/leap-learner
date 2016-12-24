@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --inline --open",
-    "start:node": "node ./lib/index.js",
-    "compile": "coffee --watch --compile --output lib src",
+    "start:node": "node ./lib/main/index.js",
+    "compile": "coffee --watch --map --compile --output lib src",
     "dev": "nodemon ./lib/prepare.js",
     "record": "node ./lib/prepare.js"
   },

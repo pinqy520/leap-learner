@@ -2,20 +2,17 @@ Rx = require 'rxjs/Rx'
 
 
 create = (learner) ->
-    createRxRecognitionFromTransform = (stream) ->
+    createRxRecognition = (stream) ->
         stream.map (matrix) -> learner.recognize matrix
 
-    createRxLearnSourceFromData = (stream, name) -> 
+    createRxLearnSource = (stream, name) -> 
         stream.map (matrix) -> learner.createLearnParams matrix, name
 
-    createRxLearnFromSources = (streams) ->
+    createRxLearn = (streams) ->
         source = Rx.Observable.merge streams...
         source.toArray().map (data) -> learner.learn data
-    
-    createRxRecognition = (stream) -> createRxRecognitionFromTransform stream
-    createRxLearn = (stream) -> createRxLearnFromSources createRxLearnSourceFromData stream
 
-    { createRxRecognition, createRxLearn }
+    { createRxRecognition, createRxLearn, createRxLearnSource }
 
 module.exports = create
 module.exports.default = create

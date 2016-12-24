@@ -2,7 +2,7 @@ brain = require 'brain.js'
 _ = require 'lodash'
 
 createLearnParams = (input, name) ->
-    console.log name
+    console.log name # , input
     param = 
         input: input
         output: {}
@@ -32,14 +32,14 @@ same = (h1, h2) ->
             return true
     return false
 
-create = (opt) ->
+create = (opt = {}) ->
     _opt = 
         minVelocity: 20
         frameCount: 5
 
     _.assign _opt, opt
     
-    _frameIntervalCount = opt.frameCount + 1
+    _frameIntervalCount = _opt.frameCount + 1
     _gestureFrameCount = _frameIntervalCount * 2
 
     _net = new brain.NeuralNetwork
@@ -56,6 +56,7 @@ create = (opt) ->
         _.zipWith matrix, _minMatrix, _subMatrix, (v, min, sub) -> (v - min) / sub
     
     _train = (data) ->
+        # console.log 'train', data
         matrixes = _.map data, 'input'
         _maxMatrix = _.unzipWith matrixes, _.rest _.max
         _minMatrix = _.unzipWith matrixes, _.rest _.min
@@ -81,6 +82,7 @@ create = (opt) ->
     isGroup = (group, hands) -> hands.length > 0 and ((group.length is 0) or (((_isAct group[0]) or (_isAct hands)) and (same group[0], hands)))
     isGesture = (buffer) -> _gestureFrameCount < buffer.length
     _formatGesture = (frames) -> 
+        # console.log 'transform', frames
         count = 0
         inc = frames.length / _frameIntervalCount
         limit = frames.length - inc - 1

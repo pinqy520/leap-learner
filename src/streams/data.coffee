@@ -10,9 +10,11 @@ create = (learner) ->
                 if learner.isGroup buffer, frame.hands
                     buffer.push frame.hands
                 else if learner.isGesture buffer
+                    # console.log 'buffer next', buffer
                     observer.next buffer
                     buffer = []
             complete = ->
+                # console.log 'buffer complete', buffer
                 observer.next buffer if learner.isGesture buffer
                 observer.complete()
             error = (err) -> observer.error err

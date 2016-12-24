@@ -1,5 +1,5 @@
-{ createRxFrameFromLeap, createRxFrameFromJson } = require './src/source'
-createRxDataStreams = require './src/data'
-createRxLearnerStreams = require './src/learner'
+{ createRxFrameFromLeap, createRxFrameFromJson } = require './streams/source'
+createRxDataStreams = require './streams/data'
+createRxLearnerStreams = require './streams/learner'
 
 module.exports = { createRxFrameFromLeap, createRxFrameFromJson, createRxDataStreams, createRxLearnerStreams }
