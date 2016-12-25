@@ -34,7 +34,7 @@
     "webpack-dev-server": "latest"
   },
   "dependencies": {
-    "brain.js": "^0.7.0",
+    "brain.js": "harthur-org/brain.js",
     "leapjs": "^0.6.4",
     "lodash": "^4.17.2",
     "rxjs": "^5.0.1"
