@@ -5,11 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --inline --open",
-    "start:node": "node ./lib/main/index.js",
-    "compile": "coffee --watch --map --compile --output lib src",
-    "dev": "nodemon ./lib/prepare.js",
-    "record": "node ./lib/prepare.js"
+    "start": "nodemon ./lib/main/index.js",
+    "compile": "coffee --map --compile --output lib src",
+    "compile:watch": "coffee --watch --map --compile --output lib src"
   },
   "repository": {
     "type": "git",
@@ -23,15 +21,8 @@
   },
   "homepage": "https://github.com/pinqy520/simple-coffee-starter#readme",
   "devDependencies": {
-    "coffee-loader": "latest",
     "coffee-script": "latest",
-    "extract-text-webpack-plugin": "latest",
-    "html-webpack-plugin": "latest",
-    "nodemon": "latest",
-    "progress-bar-webpack-plugin": "latest",
-    "webpack": "latest",
-    "json-loader": "latest",
-    "webpack-dev-server": "latest"
+    "nodemon": "latest"
   },
   "dependencies": {
     "brain.js": "harthur-org/brain.js",

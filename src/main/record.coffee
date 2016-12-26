@@ -1,7 +1,7 @@
 Leap = require 'leapjs'
 fs = require 'fs'
 
-{ parseFrameToRecordableRaw } = require './parsers'
+{ parseFrameToRecordableRaw } = require '../utils/parseFrameToRecordableRaw'
 
 interval = 10000
 
