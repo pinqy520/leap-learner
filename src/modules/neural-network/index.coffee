@@ -3,7 +3,7 @@ _ = require 'lodash'
 
 createLearnParams = (input, name) ->
     console.log name # , input
-    param = 
+    param =
         input: input
         output: {}
     param.output[name] = 1.0 if name
@@ -33,17 +33,17 @@ same = (h1, h2) ->
     return false
 
 create = (opt = {}) ->
-    _opt = 
+    _opt =
         minVelocity: 20
         frameCount: 5
 
     _.assign _opt, opt
-    
+
     _frameIntervalCount = _opt.frameCount + 1
     _gestureFrameCount = _frameIntervalCount * 2
 
     _net = new brain.NeuralNetwork
-    
+
     _maxMatrix = []
     _minMatrix = []
     _subMatrix = []
@@ -51,10 +51,10 @@ create = (opt = {}) ->
     _formatInput = (data) ->
         input: _formatMatrix data.input
         output: data.output
-    
+
     _formatMatrix = (matrix) ->
         _.zipWith matrix, _minMatrix, _subMatrix, (v, min, sub) -> (v - min) / sub
-    
+
     _train = (data) ->
         # console.log 'train', data
         matrixes = _.map data, 'input'
@@ -62,12 +62,17 @@ create = (opt = {}) ->
         _minMatrix = _.unzipWith matrixes, _.rest _.min
         _subMatrix = _.zipWith _maxMatrix, _minMatrix, _.subtract
         _net.train data.map _formatInput
-    
+
     _run = (data) -> _net.run _formatMatrix data
 
 
     learn = (data) -> _train data
-    recognize = (data) -> _run data
+    recognize = (data) ->
+        result = _run data
+        collection = _.map (_.keys result), (key) -> { key, value: result[key] }
+        maxOne = _.maxBy collection, 'value'
+        if maxOne.value > 0.5 then maxOne.key else 'nosense'
+
 
     _isAct = (hands) ->
         if hands.length > 0
@@ -81,7 +86,7 @@ create = (opt = {}) ->
 
     isGroup = (group, hands) -> hands.length > 0 and ((group.length is 0) or (((_isAct group[0]) or (_isAct hands)) and (same group[0], hands)))
     isGesture = (buffer) -> _gestureFrameCount < buffer.length
-    _formatGesture = (frames) -> 
+    _formatGesture = (frames) ->
         # console.log 'transform', frames
         count = 0
         inc = frames.length / _frameIntervalCount
