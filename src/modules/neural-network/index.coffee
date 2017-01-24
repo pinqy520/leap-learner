@@ -71,7 +71,7 @@ create = (opt = {}) ->
         result = _run data
         collection = _.map (_.keys result), (key) -> { key, value: result[key] }
         maxOne = _.maxBy collection, 'value'
-        if maxOne.value > 0.5 then maxOne.key else 'nosense'
+        if maxOne.value > 0.5 then "#{maxOne.key} (#{(maxOne.value * 100).toFixed(2)}%)" else 'nosense'
 
 
     _isAct = (hands) ->

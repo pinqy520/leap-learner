@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./lib/main/index.js",
+    "start": "node ./lib/main/index.js",
     "compile": "coffee --map --compile --output lib src",
     "compile:watch": "coffee --watch --map --compile --output lib src",
-    "record": "mkdir -p data && npm run compile && node ./lib/main/record.js"
+    "record": "shx mkdir -p data && npm run compile && node ./lib/main/record.js",
+    "dev": "concurrently 'npm run compile:watch' 'nodemon ./lib/main/index.js'"
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,9 @@
   "homepage": "https://github.com/pinqy520/simple-coffee-starter#readme",
   "devDependencies": {
     "coffee-script": "latest",
-    "nodemon": "latest"
+    "concurrently": "^3.1.0",
+    "nodemon": "latest",
+    "shx": "^0.2.2"
   },
   "dependencies": {
     "brain.js": "harthur-org/brain.js",

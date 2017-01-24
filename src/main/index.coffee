@@ -2,7 +2,15 @@ Leap = require 'leapjs'
 LeapLearner = require '../rx'
 NeuralNetwork = require '../modules/neural-network'
 
-keys = ['bad', 'good', 'left', 'right', 'ok', 'no', 'tap']
+keys = [
+    # 'bad'
+    #  'good'
+     'left'
+     'right'
+     'ok'
+    #   'no'
+       'tap'
+   ]
 
 data = ({key, value: require "../../data/#{key}.json"} for key in keys)
 
